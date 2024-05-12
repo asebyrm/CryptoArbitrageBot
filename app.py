@@ -11,7 +11,7 @@ data_lock = threading.Lock()  # Veri listesi için bir kilit oluştura
 
 def update_data():
     global data
-    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'LTC/USDT', 'BCH/USDT']
+    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'DOT/USDT']
     threshold = 0.15
     while True:
         new_data = []
