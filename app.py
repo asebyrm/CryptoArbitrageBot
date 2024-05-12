@@ -7,7 +7,7 @@ app = Flask(__name__)
 controller = ExchangeController()
 
 data = []  # Global veri deposu
-data_lock = threading.Lock()  # Veri listesi için bir kilit oluştura
+data_lock = threading.Lock()  # Veri listesi için bir kilit oluşturaa
 
 def update_data():
     global data
