@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from exchange_controller import ExchangeController
 import threading
 import time
@@ -7,32 +7,28 @@ app = Flask(__name__)
 controller = ExchangeController()
 
 data = []  # Global veri deposu
-data_lock = threading.Lock()  # Veri listesi için bir kilit oluşturaa
 
 def update_data():
     global data
-    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'DOT/USDT']
+    symbols = ['BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'ADA/USD', 'LTC/USD', 'BCH/USD']
     threshold = 0.15
+    counts = {symbol: 0 for symbol in symbols}
     while True:
         new_data = []
         for symbol in symbols:
             result = controller.check_arbitrage_opportunity(symbol, threshold)
-            if result:  # Eğer arbitraj fırsatı varsa
+            if result:  # Eğer arbitraj fırsatı varsaa
                 new_data.append(result)
-        with data_lock:  # Data listesini kilit altına alarak güncelle
-            data.clear()
-            data.extend(new_data)
-        time.sleep(60)  # Verileri her 60 saniyede bir güncelle
+        data = new_data
+        time.sleep(10)  # Verileri her 1 dakikada bir güncelle
 
 # Arka planda veri güncellemesi için thread başlat
 thread = threading.Thread(target=update_data)
-thread.daemon = True
 thread.start()
 
 @app.route('/')
 def index():
-    with data_lock:  # Data listesine erişirken kilit kullan
-        return render_template('table.html', data=data.copy())
+    return render_template('table.html', data=data)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
