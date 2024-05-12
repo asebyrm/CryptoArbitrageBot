@@ -10,7 +10,7 @@ data = []  # Global veri deposu
 
 def update_data():
     global data
-    symbols = ['BTC/USD', 'ETH/USD', 'SOL/USD', 'XRP/USD', 'ADA/USD', 'LTC/USD', 'BCH/USD']
+    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'DOT/USDT']
     threshold = 0.15
     counts = {symbol: 0 for symbol in symbols}
     while True:
