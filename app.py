@@ -16,7 +16,7 @@ def update_data():
     while True:
         new_data = []
         for symbol in symbols:
-            result = controller.check_arbitrage_opportunity(symbol, threshold, counts)
+            result = controller.check_arbitrage_opportunity(symbol, threshold)
             if result:  # Eğer arbitraj fırsatı varsa
                 new_data.append(result)
         data = new_data
