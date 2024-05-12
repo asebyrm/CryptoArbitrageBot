@@ -17,7 +17,7 @@ def update_data():
         new_data = []
         for symbol in symbols:
             result = controller.check_arbitrage_opportunity(symbol, threshold)
-            if result:  # Eğer arbitraj fırsatı varsa
+            if result:  # Eğer arbitraj fırsatı varsaa
                 new_data.append(result)
         data = new_data
         time.sleep(10)  # Verileri her 1 dakikada bir güncelle
