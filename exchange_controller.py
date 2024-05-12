@@ -67,20 +67,15 @@ class ExchangeController:
             max_price = max(prices.values())
             price_difference = (max_price - min_price) / min_price * 100
             data = {
-                'timestamp': datetime.now(),
+                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 'symbol': symbol,
                 'price_difference': price_difference,
                 'prices': prices,
-                'arbitrage_opportunity': None
+                'arbitrage_opportunity': price_difference > threshold
             }
-            if price_difference > threshold:
-                print(f"{data['timestamp']}: Arbitrage opportunity detected for {symbol}!   {price_difference}")
-                data['arbitrage_opportunity'] = True
-                self.save_data_to_csv(data)
-            else:
-                print(f"{datetime.now()}: No significant price difference for {symbol}. Prices: {prices}")
-                data['arbitrage_opportunity'] = False
-                self.save_data_to_csv(data)
+            self.save_data_to_csv(data)
+            return data
+        return None
 
     def save_data_to_csv(self, data, filename='arbitrage_data.csv'):
         # Tüm borsa isimlerini almak için data['prices'] anahtarlarını kullan

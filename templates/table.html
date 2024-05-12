@@ -2,26 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="10">  <!-- Sayfayı her 60 saniyede bir yenile -->
-    <title>Arbitraj Tablosu</title>
+    <title>Arbitrage Opportunities</title>
 </head>
 <body>
-    <h1>Arbitraj Fırsatları</h1>
+    <h1>Arbitrage Opportunities</h1>
     <table border="1">
         <tr>
-            <th>Zaman Damgası</th>
-            <th>Sembol</th>
-            <th>Fiyat Farkı</th>
-            <th>Arbitraj Fırsatı</th>
+            <th>Timestamp</th>
+            <th>Symbol</th>
+            <th>Price Difference (%)</th>
+            <th>Details</th>
+            <th>Opportunity</th>
         </tr>
         {% for item in data %}
         <tr>
-            <td>{{ item['timestamp'] }}</td>
-            <td>{{ item['symbol'] }}</td>
-            <td>{{ item['price_difference'] }}</td>
-            <td>{{ item['arbitrage_opportunity'] }}</td>
+            <td>{{ item.timestamp }}</td>
+            <td>{{ item.symbol }}</td>
+            <td>{{ item.price_difference | round(2) }}</td>
+            <td>{{ item.prices }}</td>
+            <td>{{ item.arbitrage_opportunity }}</td>
         </tr>
         {% endfor %}
     </table>
 </body>
 </html>
+

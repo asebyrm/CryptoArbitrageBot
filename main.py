@@ -4,7 +4,7 @@ import time
 
 def main():
     controller = ExchangeController()
-    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'LTC/USDT', 'BCH/USDT']
+    symbols = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'XRP/USDT', 'ADA/USDT', 'DOGE/USDT', 'DOT/USDT']
     threshold = 0.20
 
     while True:
