@@ -2,23 +2,36 @@ import ccxt
 import csv
 from datetime import datetime
 
+
 class ExchangeController:
     def __init__(self):
         # API anahtarlarınızı buraya ekleyeceksiniz, şimdilik yoruma alındı
         self.exchange_config = {
-            'kraken': {
-                # 'apiKey': 'YOUR_KRAKEN_API_KEY',
-                # 'secret': 'YOUR_KRAKEN_SECRET'
+            'binance': {
+                # 'apiKey': 'YOUR_BINANCE_API_KEY',
+                # 'secret': 'YOUR_BINANCE_SECRET'
             },
             'coinbase': {
                 # 'apiKey': 'YOUR_COINBASE_API_KEY',
                 # 'secret': 'YOUR_COINBASE_SECRET'
             },
-            'binance': {
-                # 'apiKey': 'YOUR_BINANCE_API_KEY',
-                # 'secret': 'YOUR_BINANCE_SECRET'
+            'kraken': {
+                # 'apiKey': 'YOUR_KRAKEN_API_KEY',
+                # 'secret': 'YOUR_KRAKEN_SECRET'
             },
-            'bitfinex': {
+            'bitget': {
+                # 'apiKey': 'YOUR_BITFINEX_API_KEY',
+                # 'secret': 'YOUR_BITFINEX_SECRET'
+            },
+            'okx': {
+                # 'apiKey': 'YOUR_BITFINEX_API_KEY',
+                # 'secret': 'YOUR_BITFINEX_SECRET'
+            },
+            'kucoin': {
+                # 'apiKey': 'YOUR_BITFINEX_API_KEY',
+                # 'secret': 'YOUR_BITFINEX_SECRET'
+            },
+            'cryptocom': {
                 # 'apiKey': 'YOUR_BITFINEX_API_KEY',
                 # 'secret': 'YOUR_BITFINEX_SECRET'
             }
@@ -53,20 +66,47 @@ class ExchangeController:
             min_price = min(prices.values())
             max_price = max(prices.values())
             price_difference = (max_price - min_price) / min_price * 100
-            return {
+            data = {
+                'timestamp': datetime.now(),
                 'symbol': symbol,
-                'min_price': min_price,
-                'max_price': max_price,
-                'price_difference': price_difference
+                'price_difference': price_difference,
+                'prices': prices,
+                'arbitrage_opportunity': None
             }
-        else:
-            return {'error': 'No prices available'}
+            if price_difference > threshold:
+                print(f"{data['timestamp']}: Arbitrage opportunity detected for {symbol}!   {price_difference}")
+                data['arbitrage_opportunity'] = True
+                self.save_data_to_csv(data)
+            else:
+                print(f"{datetime.now()}: No significant price difference for {symbol}. Prices: {prices}")
+                data['arbitrage_opportunity'] = False
+                self.save_data_to_csv(data)
 
     def save_data_to_csv(self, data, filename='arbitrage_data.csv'):
-        fieldnames = ['timestamp', 'symbol', 'price_difference', 'prices', 'count']
+        # Tüm borsa isimlerini almak için data['prices'] anahtarlarını kullan
+        exchanges = list(data['prices'].keys())
+        # Her bir borsa için bir sütun başlığı oluştur
+        fieldnames = ['timestamp', 'symbol'] + exchanges + ['price_difference', 'arbitrage_opportunity']
         try:
             with open(filename, 'a', newline='') as csvfile:
+                # Eğer dosya yeni oluşturulduysa, sütun başlıklarını yaz
+                if csvfile.tell() == 0:
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                    writer.writeheader()
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writerow(data)
+
+                # Verileri uygun şekilde düzenle
+                row = {
+                    'timestamp': data['timestamp'],
+                    'symbol': data['symbol'],
+                    'price_difference': f"{data['price_difference']:.2f}",
+                    'arbitrage_opportunity': data['arbitrage_opportunity']
+                }
+                # Her borsanın fiyatını ilgili sütuna yerleştir
+                row.update(data['prices'])
+
+                # Satırı yaz
+                writer.writerow(row)
         except IOError as e:
             print(f"Error writing to CSV: {str(e)}")
+
