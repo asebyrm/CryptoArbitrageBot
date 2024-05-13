@@ -10,7 +10,7 @@ def main():
     while True:
         for symbol in symbols:
             controller.check_arbitrage_opportunity(symbol, threshold)
-        time.sleep(3)
+            time.sleep(1)
 
 if __name__ == '__main__':
     main()

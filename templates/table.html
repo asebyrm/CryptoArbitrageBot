@@ -1,29 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Arbitrage Opportunities</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbitraj Fırsatları</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f3f3f3;
+            border-top: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
-    <h1>Arbitrage Opportunities</h1>
-    <table border="1">
-        <tr>
-            <th>Timestamp</th>
-            <th>Symbol</th>
-            <th>Price Difference (%)</th>
-            <th>Details</th>
-            <th>Opportunity</th>
-        </tr>
-        {% for item in data %}
-        <tr>
-            <td>{{ item.timestamp }}</td>
-            <td>{{ item.symbol }}</td>
-            <td>{{ item.price_difference | round(2) }}</td>
-            <td>{{ item.prices }}</td>
-            <td>{{ item.arbitrage_opportunity }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <main>
+        <h1>Arbitraj Fırsatları</h1>
+        <p>Fiyat farkı %0.20 üstündeyse >>> Fırsat: "evet" </p>
+        <table id="arbitrageTable">
+            <thead>
+                <tr>
+                    <th>Zaman Damgası</th>
+                    <th>Sembol</th>
+                    <th>Fiyat Farkı</th>
+                    <th>Fırsat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Veriler buraya eklenecek -->
+                <p>İlk yükleme için biraz bekleyin</p>
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        Copyright © 2024 Ahmet Selim Bayram
+    </footer>
+
+    <script>
+    function fetchData() {
+        $.getJSON('/data', function(data) {
+            var tableBody = $('#arbitrageTable tbody');
+            tableBody.empty(); // Mevcut verileri temizle
+            data.forEach(function(item) {
+                var row = '<tr>' +
+                    '<td>' + item.timestamp + '</td>' +
+                    '<td>' + item.symbol + '</td>' +
+                    '<td>' + item.price_difference + '%</td>' +
+                    '<td>' + (item.arbitrage_opportunity ? 'Evet' : 'Hayır') + '</td>' +
+                    '</tr>';
+                tableBody.append(row);
+            });
+        });
+    }
+    setInterval(fetchData, 20000); // # Update data every 20 second
+    fetchData(); // İlk veri çekimi
+    </script>
 </body>
 </html>
-

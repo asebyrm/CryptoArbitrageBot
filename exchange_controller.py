@@ -69,11 +69,11 @@ class ExchangeController:
             data = {
                 'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 'symbol': symbol,
-                'price_difference': price_difference,
+                'price_difference': f"{price_difference:.2f}",
                 'prices': prices,
                 'arbitrage_opportunity': price_difference > threshold
             }
-            self.save_data_to_csv(data)
+            #self.save_data_to_csv(data)
             return data
         return None
 
@@ -94,7 +94,7 @@ class ExchangeController:
                 row = {
                     'timestamp': data['timestamp'],
                     'symbol': data['symbol'],
-                    'price_difference': f"{data['price_difference']:.2f}",
+                    'price_difference': data['price_difference'],
                     'arbitrage_opportunity': data['arbitrage_opportunity']
                 }
                 # Her borsanın fiyatını ilgili sütuna yerleştir
